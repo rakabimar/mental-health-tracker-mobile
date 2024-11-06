@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+// Impor drawer widget
+import 'package:mental_health_tracker/widgets/left_drawer.dart';
+import 'package:mental_health_tracker/moodentry_form.dart';
 
 class MyHomePage extends StatelessWidget {
   MyHomePage({super.key});
@@ -26,10 +29,14 @@ class MyHomePage extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
+        // Mengganti warna icon drawer menjadi putih
+        iconTheme: const IconThemeData(color: Colors.white),
         // Warna latar belakang AppBar diambil dari skema warna tema aplikasi.
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       // Body halaman dengan padding di sekelilingnya.
+      // Masukkan drawer sebagai parameter nilai drawer dari widget Scaffold
+      drawer: const LeftDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         // Menyusun widget secara vertikal dalam sebuah kolom.
@@ -148,15 +155,23 @@ class ItemCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(12),
       
       child: InkWell(
-        // Aksi ketika kartu ditekan.
-        onTap: () {
-          // Menampilkan pesan SnackBar saat kartu ditekan.
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(content: Text("Kamu telah menekan tombol ${item.name}!"))
-            );
-        },
+        // Area responsif terhadap sentuhan
+      onTap: () {
+        // Memunculkan SnackBar ketika diklik
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(SnackBar(
+              content: Text("Kamu telah menekan tombol ${item.name}!")));
+
+        // Navigate ke route yang sesuai (tergantung jenis tombol)
+        if (item.name == "Tambah Mood") {
+          Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const MoodEntryFormPage(),
+                    ));
+        }
+      },
         // Container untuk menyimpan Icon dan Text
         child: Container(
           padding: const EdgeInsets.all(8),
